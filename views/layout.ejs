@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="<%= theme %>">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> • b2b Forum</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body class="theme-<%= theme %>">
+  <header class="site-header">
+    <div class="container">
+      <div class="header-row">
+        <div class="header-left">
+          <h1><a href="/">b2b Forum</a></h1>
+        </div>
+        <div class="header-right">
+          <nav>
+            <% if (user) { %>
+              <div class="account">
+                <button class="account-btn" aria-haspopup="true" aria-expanded="false">
+                  <img class="pfp" src="<%= user.pfp %>" alt="pfp" />
+                  <span class="account-name"><%= clean(user.name) %></span>
+                  <span class="caret">▾</span>
+                </button>
+                <div class="account-menu" role="menu">
+                  <form method="post" action="/toggle-theme" class="menu-item-form">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit">Toggle <%= theme === 'light' ? 'Dark' : 'Light' %> Mode</button>
+                  </form>
+                  <% if (user.level >= 9) { %>
+                    <a role="menuitem" href="/admin/topics">Admin</a>
+                  <% } %>
+                  <a role="menuitem" href="/auth/logout">Logout</a>
+                </div>
+              </div>
+            <% } else { %>
+              <a class="login-link" href="/auth/discord">Login</a>
+            <% } %>
+          </nav>
+        </div>
+      </div>
+      <% if (user) { %>
+        <div class="header-row subnav">
+          <div class="header-left">
+            <a href="/posts/new">New post</a>
+            <span class="sep">|</span>
+            <a href="/topics">Topics</a>
+            <span class="sep">|</span>
+            <a href="/topics/suggest">Suggest Topic</a>
+          </div>
+          <div class="header-right"></div>
+        </div>
+      <% } %>
+    </div>
+  </header>
+
+  <main class="container">
+    <%- body %>
+  </main>
+
+  <footer class="site-footer container">
+    <small>Simple 2000s-style forum • Made by MattyKatos</small>
+  </footer>
+</body>
+</html>
